@@ -44,7 +44,7 @@ The project aims to predict an individual's carbon footprint based on their dail
    - **Pydantic validation**: Ensures proper input types and ranges.
    - **CORS middleware**: For cross-origin access.
 2. Hosted the API on **Render** with Swagger UI available at:
-   - **[Public Swagger URL](https://linear-regression-model-pjjl.onrender.com//docs)**
+   - **[Public Swagger URL](https://linear-regression-model-pjjl.onrender.com/docs)**
 
 ### Task 3: Flutter Mobile App
 1. Developed a mobile app with Flutter to interact with the API.
@@ -78,7 +78,7 @@ The project aims to predict an individual's carbon footprint based on their dail
    ```bash
    uvicorn prediction:app --reload
    ```
-4. Access Swagger UI at `http://127.0.0.1:8000/docs` or use the **[deployed API link](https://linear-regression-model-pjjl.onrender.com//docs)**.
+4. Access Swagger UI at `http://127.0.0.1:8000/docs` or use the **[deployed API link](https://linear-regression-model-pjjl.onrender.com/docs)**.
 
 ### Step 3: Flutter Mobile App
 1. Navigate to `summative/FlutterApp/`.
