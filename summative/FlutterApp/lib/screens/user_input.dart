@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; // For JSON encoding/decoding
-import 'analysis.dart';
 
-// Main widget for the Daily Habits screen
 class DailyHabitsScreen extends StatefulWidget {
   const DailyHabitsScreen({super.key});
 
@@ -12,30 +10,28 @@ class DailyHabitsScreen extends StatefulWidget {
 }
 
 class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
-  // Key for form validation
   final _formKey = GlobalKey<FormState>();
 
-  // Text editing controllers for input fields
-  final _devicesController = TextEditingController();
-  final _hoursController = TextEditingController();
-  final _groceryController = TextEditingController();
-  final _transportController = TextEditingController();
-  final _clothesController = TextEditingController();
-  final _mealsController = TextEditingController();
+  // Text editing controllers
+  final _monthlyGroceryController = TextEditingController();
+  final _vehicleDistanceController = TextEditingController();
+  final _wasteBagCountController = TextEditingController();
+  final _tvPcHoursController = TextEditingController();
+  final _clothesMonthlyController = TextEditingController();
+  final _internetHoursController = TextEditingController();
 
-  // API URL
-  static const String apiUrl = 'https://linear-regression-model-pjjl.onrender.com/predict/';
+  static const String apiUrl =
+      'https://linear-regression-model-pjjl.onrender.com/predict/';
 
   @override
   void dispose() {
-    // Dispose of controllers to free up resources
     for (var controller in [
-      _devicesController,
-      _hoursController,
-      _groceryController,
-      _transportController,
-      _clothesController,
-      _mealsController,
+      _monthlyGroceryController,
+      _vehicleDistanceController,
+      _wasteBagCountController,
+      _tvPcHoursController,
+      _clothesMonthlyController,
+      _internetHoursController,
     ]) {
       controller.dispose();
     }
@@ -45,67 +41,62 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Dismiss keyboard when tapping outside of the text fields
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Form(
-                key: _formKey, // Assign form key for validation
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
-                      'Analyse Your Daily Habits',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      'Analyse Your Carbon Footprint',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
-                    // Input fields for various habits
+                    // Input fields based on Swagger UI
                     _buildInputField(
-                      'How many electronic devices do you own?',
-                      _devicesController,
-                      'Number',
+                      'Monthly grocery bill',
+                      _monthlyGroceryController,
+                      'Amount in USD',
                       TextInputType.number,
                     ),
                     _buildInputField(
-                      'How many hours a day do you spend in front of your device?',
-                      _hoursController,
+                      'Vehicle monthly distance (km)',
+                      _vehicleDistanceController,
+                      'Distance in kilometers',
+                      TextInputType.number,
+                    ),
+                    _buildInputField(
+                      'Waste bag weekly count',
+                      _wasteBagCountController,
+                      'Number of bags',
+                      TextInputType.number,
+                    ),
+                    _buildInputField(
+                      'Daily hours using TV/PC',
+                      _tvPcHoursController,
                       'Hours',
                       const TextInputType.numberWithOptions(decimal: true),
                     ),
                     _buildInputField(
-                      'Monthly grocery spending',
-                      _groceryController,
-                      'Amount in USD',
-                      const TextInputType.numberWithOptions(decimal: true),
-                    ),
-                    _buildInputField(
-                      'Monthly transportation expenditure',
-                      _transportController,
-                      'Amount in USD',
-                      const TextInputType.numberWithOptions(decimal: true),
-                    ),
-                    _buildInputField(
-                      'How many clothes do you buy monthly?',
-                      _clothesController,
+                      'New clothes bought monthly',
+                      _clothesMonthlyController,
                       'Number',
                       TextInputType.number,
                     ),
                     _buildInputField(
-                      'Weekly number of meals consumed',
-                      _mealsController,
-                      'Number',
-                      TextInputType.number,
+                      'Daily hours using the internet',
+                      _internetHoursController,
+                      'Hours',
+                      const TextInputType.numberWithOptions(decimal: true),
                     ),
                     const SizedBox(height: 24),
-                    // Submit button for calculating carbon footprint
                     ElevatedButton(
                       onPressed: _submitForm,
                       style: ElevatedButton.styleFrom(
@@ -117,10 +108,7 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
                       ),
                       child: const Text(
                         'Calculate Carbon Footprint',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ],
@@ -133,7 +121,6 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
     );
   }
 
-  // Helper function to build input fields
   Widget _buildInputField(
     String label,
     TextEditingController controller,
@@ -147,10 +134,7 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           TextFormField(
@@ -160,9 +144,6 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
               filled: true,
               fillColor: const Color(0xFFE8F5F1),
               hintText: hint,
-              hintStyle: TextStyle(
-                color: Colors.grey[600],
-              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,
@@ -172,15 +153,14 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
                 vertical: 12,
               ),
             ),
-            // Validation for input fields
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter a value'; // Check for empty input
+                return 'Please enter a value';
               }
               if (double.tryParse(value) == null) {
-                return 'Please enter a valid number'; // Check for valid number
+                return 'Please enter a valid number';
               }
-              return null; // Validation passed
+              return null;
             },
           ),
         ],
@@ -188,35 +168,33 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
     );
   }
 
-  // Function to handle form submission
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      FocusScope.of(context).unfocus(); // Dismiss keyboard
+      FocusScope.of(context).unfocus();
 
-      // Gather input data
       final Map<String, dynamic> inputData = {
-        "monthly_grocery_bill": double.parse(_groceryController.text),
-        "vehicle_monthly_distance_km": double.parse(_transportController.text),
-        "waste_bag_weekly_count": int.parse(_mealsController.text),
-        "how_long_tv_pc_daily_hour": double.parse(_hoursController.text),
-        "how_many_new_clothes_monthly": int.parse(_clothesController.text),
-        "how_long_internet_daily_hour": double.parse(_devicesController.text),
+        "monthly_grocery_bill": double.parse(_monthlyGroceryController.text),
+        "vehicle_monthly_distance_km":
+            double.parse(_vehicleDistanceController.text),
+        "waste_bag_weekly_count": int.parse(_wasteBagCountController.text),
+        "how_long_tv_pc_daily_hour": double.parse(_tvPcHoursController.text),
+        "how_many_new_clothes_monthly":
+            int.parse(_clothesMonthlyController.text),
+        "how_long_internet_daily_hour":
+            double.parse(_internetHoursController.text),
       };
 
       try {
-        // Send POST request to the API
         final response = await http.post(
           Uri.parse(apiUrl),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(inputData),
         );
 
-        // Handle API response
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
           final predictedEmission = responseData['predicted_carbon_emission'];
 
-          // Navigate to the Carbon Footprint Screen with the prediction
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -233,7 +211,6 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
     }
   }
 
-  // Helper function to display error dialog
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
@@ -251,7 +228,6 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
   }
 }
 
-// Updated Carbon Footprint Screen
 class CarbonFootprintScreen extends StatelessWidget {
   final double prediction;
 
