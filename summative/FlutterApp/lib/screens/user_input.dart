@@ -231,8 +231,7 @@ class _DailyHabitsScreenState extends State<DailyHabitsScreen> {
 class CarbonFootprintScreen extends StatelessWidget {
   final double prediction;
 
-  const CarbonFootprintScreen({Key? key, required this.prediction})
-      : super(key: key);
+  const CarbonFootprintScreen({super.key, required this.prediction});
 
   @override
   Widget build(BuildContext context) {
